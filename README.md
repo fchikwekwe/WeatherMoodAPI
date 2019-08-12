@@ -1,0 +1,1 @@
+Creating a weather API that takes in the user's mood and returns the appropriate kind of weather. 
