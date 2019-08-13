@@ -17,27 +17,32 @@ module.exports = (app) => {
     })
 
     // CREATE one mood
-    app.post('/moods/new', (req, res) => {
-        console.log(req.query);
+    app.post('/moods/new', async (req, res) => {
+        // console.log(req.query);
         let city = req.query.city;
         let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-        axios.post(url)
-        .then(weather => {
-            var mood = [
-                {
-                    mood: req.query.mood,
-                    city: city,
-                    weather: weather
-                }
-            ]
-            console.log(mood);
-            Mood.create(mood)
-              .then(response => {
-                  response.redirect('/moods');
-            }) 
-        })
+
+        const weather = await axios.post(url);
+
+        var mood = [
+            {
+                mood: req.query.mood,
+                city: city,
+                weather: weather
+            }
+        ]
+        console.log("something")
+        let save = await saveMood(mood);
+
+        console.log('redirecting');
+        // return res.redirect('/moods');
     })
+
+    function saveMood(mood) {
+        const moodDoc = Mood.create(mood);
+        return moodDoc
+    }
 
     // SHOW one mood
     app.get('/moods/:id', (req, res) => {
