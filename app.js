@@ -1,17 +1,27 @@
 
 require('dotenv').config();
 
-const request = require('request');
+const express = require('express');
+const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 
-const apiKey = process.env.WEATHER_API_KEY;
-let city = 'portland';
-let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
+app.use(express.static('public'));
 
-request(url, function (err, response, body) {
-    if(err) {
-        console.log('error:', error);
-    } else {
-        console.log('body:', body);
-    }
-});
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/weather-mood', { useNewUrlParser: true });
+
+// require('./controllers/users.js')(app);
+require('./controllers/moods.js')(app);
+
+app.listen(PORT, () => {
+    console.log('Weather Mood app listening on port', PORT, '!');
+})
+
+module.exports = app;
+
