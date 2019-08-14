@@ -1,20 +1,23 @@
 const axios = require('axios');
 const JSON = require('circular-json');
 
+// Default city
 let city = 'San Fransisco';
 const apiKey = process.env.WEATHER_API_KEY;
 
 module.exports = (app) => {
-    //
+    // Instructions for use of microservice
     app.get('/', async(req, res) => {
         res.sendFile('index.html', { root: __dirname });
     })
 
     // CREATE one weather object based on the user's location
     app.post('/weather', async (req, res) => {
+        // Get mood and city via post request from the user
         if(req.query.city){
             let city = req.query.city;
         }
+        // Use axios to ping the API and return a weather object
         let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
         const weather = await axios.post(url);
 
@@ -33,8 +36,8 @@ module.exports = (app) => {
         if (req.query.city) {
             let city = req.query.city;
         }
-        let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
+        let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
         // Use axios to ping the API and return a weather object
         const weather = await axios.post(url);
         var mood = [
