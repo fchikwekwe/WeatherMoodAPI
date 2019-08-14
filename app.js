@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/weather-mood', { useNewUrlParser: true });
 
 // require('./controllers/users.js')(app);
-require('./controllers/moods.js')(app);
+require('./moods.js')(app);
 
 app.listen(PORT, () => {
     console.log('Weather Mood app listening on port', PORT, '!');
